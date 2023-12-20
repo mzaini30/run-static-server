@@ -11,7 +11,10 @@ Letakkan file `START.exe` sejajar dengan folder `web/`. Jadi, seperti ini:
 📄 START.exe
 📂 web
    📄 index.html
+   📄 port.txt
 ```
+
+Untuk `web/port.txt`, diisi dengan 4 digit angka.
 
 Untuk menjalankan, tinggal double click `START.exe`.
 

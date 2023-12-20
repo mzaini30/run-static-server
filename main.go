@@ -5,6 +5,7 @@ import (
 	"log"
 	"math/rand"
 	"net/http"
+	"os"
 	"os/exec"
 	"runtime"
 	"time"
@@ -45,11 +46,16 @@ func main() {
 	fs := http.FileServer(http.Dir("./web"))
 	http.Handle("/", fs)
 
-	portnya := randomString(4)
+	dat, err := os.ReadFile("./web/port.txt")
+    if err != nil {
+		log.Fatal(err)
+	}
+
+	portnya := string(dat)
 
 	log.Print("Tutup aplikasi ini jika sudah tidak digunakan")
 	openbrowser("http://localhost:" + portnya)
-	err := http.ListenAndServe(":" + portnya, nil)
+	err = http.ListenAndServe(":" + portnya, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
