@@ -11,16 +11,15 @@ import (
 	"time"
 )
 
-
 var randomizer = rand.New(rand.NewSource(time.Now().UTC().UnixNano()))
 var letters = []rune("123456789")
 
 func randomString(length int) string {
-    b := make([]rune, length)
-    for i := range b {
-        b[i] = letters[randomizer.Intn(len(letters))]
-    }
-    return string(b)
+	b := make([]rune, length)
+	for i := range b {
+		b[i] = letters[randomizer.Intn(len(letters))]
+	}
+	return string(b)
 }
 
 func openbrowser(url string) {
@@ -43,11 +42,23 @@ func openbrowser(url string) {
 }
 
 func main() {
-	fs := http.FileServer(http.Dir("./web"))
+	lokasi := "./web"
+
+	_, err_path := os.Stat("./web/path.txt")
+	if err_path == nil {
+		path_byte, err_path_ambil := os.ReadFile("./web/path.txt")
+		if err_path_ambil != nil {
+			log.Fatal(err_path_ambil)
+		}
+		path := string(path_byte)
+		lokasi = "./web/" + path
+	}
+
+	fs := http.FileServer(http.Dir(lokasi))
 	http.Handle("/", fs)
 
 	dat, err := os.ReadFile("./web/port.txt")
-    if err != nil {
+	if err != nil {
 		log.Fatal(err)
 	}
 
@@ -55,7 +66,7 @@ func main() {
 
 	log.Print("Tutup aplikasi ini jika sudah tidak digunakan")
 	openbrowser("http://localhost:" + portnya)
-	err = http.ListenAndServe(":" + portnya, nil)
+	err = http.ListenAndServe(":"+portnya, nil)
 	if err != nil {
 		log.Fatal(err)
 	}
